@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>我的基础网页</title>
+  <meta name="description" content="一个干净、响应式、可直接使用的基础网页模板。" />
+  <style>
+    /* --------- 基础样式与主题色 --------- */
+    :root {
+      --bg: #ffffff;
+      --fg: #0f172a; /* slate-900 */
+      --muted: #475569; /* slate-600 */
+      --brand: #2563eb; /* blue-600 */
+      --brand-weak: #dbeafe; /* blue-100 */
+      --card: #f8fafc; /* slate-50 */
+      --border: #e2e8f0; /* slate-200 */
+      --shadow: 0 8px 28px rgba(2, 6, 23, 0.08);
+      --radius: 16px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220; /* 深色背景 */
+        --fg: #e5e7eb; /* 文本 */
+        --muted: #94a3b8;
+        --brand: #60a5fa;
+        --brand-weak: #1e293b;
+        --card: #0f172a;
+        --border: #1f2937;
+        --shadow: 0 10px 32px rgba(0,0,0,0.35);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Segoe UI Emoji";
+      background: var(--bg); color: var(--fg);
+      line-height: 1.65;
+    }
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; display: block; }
+
+    /* --------- 容器与布局 --------- */
+    .container { width: min(1100px, 92%); margin: 0 auto; }
+    .stack { display: grid; gap: 1.25rem; }
+
+    /* --------- 顶部导航 --------- */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: saturate(1.2) blur(6px);
+      background: color-mix(in oklab, var(--bg) 80%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      min-height: 64px;
+    }
+    .brand { display: flex; align-items: center; gap: .6rem; font-weight: 700; }
+    .brand-badge {
+      width: 28px; height: 28px; border-radius: 8px; background: var(--brand);
+      display: grid; place-items: center; color: white; font-size: .9rem; box-shadow: var(--shadow);
+    }
+    nav ul { list-style: none; display: flex; gap: 1rem; padding: 0; margin: 0; }
+    nav a { padding: .5rem .75rem; border-radius: 10px; }
+    nav a:hover { background: var(--brand-weak); text-decoration: none; }
+
+    /* 移动端菜单按钮 */
+    .menu-btn { display: none; border: 1px solid var(--border); background: transparent; color: inherit; padding: .5rem .75rem; border-radius: 10px; }
+    @media (max-width: 720px) {
+      nav ul { display: none; }
+      nav ul.open { display: grid; gap: .5rem; padding: .75rem 0; }
+      .menu-btn { display: inline-flex; align-items: center; gap: .5rem; }
+      .nav { flex-wrap: wrap; }
+    }
+
+    /* --------- 首屏 Hero --------- */
+    .hero {
+      padding: 72px 0 36px; text-align: center; display: grid; place-items: center;
+    }
+    .hero h1 { font-size: clamp(1.8rem, 2.6vw + 1rem, 3rem); line-height: 1.15; margin: 0 0 .6rem; }
+    .hero p { color: var(--muted); margin: 0 auto 1.25rem; max-width: 60ch; }
+    .hero .cta { display: inline-flex; gap: .75rem; flex-wrap: wrap; }
+    .btn {
+      border: 1px solid var(--border); background: var(--brand); color: white; box-shadow: var(--shadow);
+      padding: .7rem 1rem; border-radius: 12px; font-weight: 600; letter-spacing: .2px;
+    }
+    .btn.secondary { background: transparent; color: var(--fg); }
+    .btn:hover { filter: brightness(1.05); text-decoration: none; }
+
+    /* --------- 内容区块 --------- */
+    section { padding: 42px 0; }
+    .section-title { font-size: 1.3rem; margin: 0 0 .75rem; }
+
+    .grid {
+      display: grid; gap: 1rem;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .col { grid-column: span 12; }
+    @media (min-width: 720px) { .col-4 { grid-column: span 4; } }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 1rem; display: grid; gap: .5rem;
+    }
+    .card h3 { margin: 0; font-size: 1.1rem; }
+    .card p { margin: 0; color: var(--muted); }
+
+    /* --------- 页脚 --------- */
+    footer { border-top: 1px solid var(--border); padding: 28px 0; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="主页">
+        <span class="brand-badge">∑</span>
+        <span>我的网站</span>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-controls="menu" aria-expanded="false">☰ 菜单</button>
+      <nav class="container" style="padding: 0;">
+        <ul id="menu" aria-label="主导航">
+          <li><a href="#about">关于</a></li>
+          <li><a href="#features">特性</a></li>
+          <li><a href="#contact">联系</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 首屏区域 -->
+  <main id="top">
+    <section class="hero">
+      <div class="container stack">
+        <h1>一个小而美的基础网页模板</h1>
+        <p>开箱即用 · 响应式布局 · 支持暗色模式 · 仅原生 HTML/CSS/JS。直接保存为 <code>index.html</code> 即可使用。</p>
+        <div class="cta">
+          <a class="btn" href="#features">立即浏览</a>
+          <a class="btn secondary" href="#contact">联系我</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 关于 -->
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title">关于本模板</h2>
+        <p>这是一个为小项目、作业展示、个人介绍或原型页面准备的基础模板。你可以很方便地替换文字、颜色和区块结构，快速上线一个简洁的网页。</p>
+      </div>
+    </section>
+
+    <!-- 特性卡片 -->
+    <section id="features">
+      <div class="container">
+        <h2 class="section-title">特性</h2>
+        <div class="grid">
+          <article class="card col col-4">
+            <h3>响应式布局</h3>
+            <p>使用 CSS Grid 与现代单位，自动适配手机与桌面。</p>
+          </article>
+          <article class="card col col-4">
+            <h3>暗色模式</h3>
+            <p>根据系统偏好自动切换色彩，让阅读更舒适。</p>
+          </article>
+          <article class="card col col-4">
+            <h3>零依赖</h3>
+            <p>无需引入额外库，原生 HTML/CSS/JS 即可运行。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系区块 -->
+    <section id="contact">
+      <div class="container">
+        <h2 class="section-title">联系我</h2>
+        <p>把下面的电子邮箱替换为你的，或添加更多社交链接。</p>
+        <p>邮箱：<a href="mailto:you@example.com">you@example.com</a></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer>
+    <div class="container">
+      © <span id="year"></span> 我的网页 · 保留所有权利
+    </div>
+  </footer>
+
+  <script>
+    // 当前年份
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 移动端导航开合
+    const menuBtn = document.getElementById('menuBtn');
+    const menu = document.getElementById('menu');
+    menuBtn.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // 平滑滚动（兼容性良好）
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        const el = document.querySelector(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // 关闭移动菜单
+          menu.classList.remove('open');
+          menuBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
